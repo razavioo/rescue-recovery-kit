@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "recovery_github_api_qualification",
+  "started_at": "2026-10-27T08:46:51.036833+00:00",
+  "vantage_point": "local_workstation",
+  "request_host": "api.github.com",
+  "repository": "Kianmhz/GooseRelayVPN",
+  "commit": "0ed803f635890cbc021f71d7c8746ca1d2f262b1",
+  "authenticated": false,
+  "transport": "direct_https_verified_system_tls",
+  "body_delivery": "GitHub Contents API inline Base64 only",
+  "raw_url_followed": false,
+  "codeload_used": false,
+  "checks": [
+    {
+      "path": "go.mod",
+      "local_bytes": 222,
+      "local_sha256": "a1eab0373c5840050a026c06a475018452a7a8d382f159b272eead9c3fc7c61b",
+      "api_bytes": 222,
+      "api_sha256": "a1eab0373c5840050a026c06a475018452a7a8d382f159b272eead9c3fc7c61b",
+      "bytes_match": true,
+      "qualified": true,
+      "seconds": 0.473
+    },
+    {
+      "path": "apps_script/Code.gs",
+      "local_bytes": 5195,
+      "local_sha256": "c4b7db0d492b62369a70e7d45ce01d540ece8a419f9c230a9d71496587668d68",
+      "api_bytes": 5195,
+      "api_sha256": "c4b7db0d492b62369a70e7d45ce01d540ece8a419f9c230a9d71496587668d68",
+      "bytes_match": true,
+      "qualified": true,
+      "seconds": 2.555
+    }
+  ],
+  "end_to_end": {
+    "qualified": true,
+    "manifest_source": "local_only_generated_pinned_manifest",
+    "manifest_sha256": "49c198e0e26d946ce9d0b4a9234b18031fe98d50dae5451eba7a00ec87c1897b",
+    "artifact_path": "go.mod",
+    "bytes": 222,
+    "sha256": "a1eab0373c5840050a026c06a475018452a7a8d382f159b272eead9c3fc7c61b",
+    "bytes_match": true,
+    "artifact_executable": false,
+    "artifact_mode": "0o600",
+    "recovery_result": {
+      "schema_version": 1,
+      "bundle_id": "public-api-qualification",
+      "manifest_sha256": "49c198e0e26d946ce9d0b4a9234b18031fe98d50dae5451eba7a00ec87c1897b",
+      "verified_files": 1,
+      "executed": false,
+      "sources_used": [
+        {
+          "file": "manifest.json",
+          "source": "local-manifest-only"
+        },
+        {
+          "file": "go.mod",
+          "source": "canonical-public-github-api"
+        }
+      ],
+      "source_failures": [
+        {
+          "file": "go.mod",
+          "source": "local-manifest-only",
+          "result": "unavailable_or_unverified"
+        }
+      ]
+    },
+    "temp_output_removed_after_check": true
+  },
+  "finished_at": "2026-10-27T08:47:00.510843+00:00",
+  "seconds": 9.474,
+  "own_kit_mirrors_published": false,
+  "executed_retrieved_files": false,
+  "limitations": [
+    "The manifest trust anchor in the end-to-end check was generated and stored locally; it was not retrieved from GitHub.",
+    "The checked public upstream files and commit do not establish availability of our own unpublished kit or mirrors.",
+    "This validates API inline retrieval and hash-checked fallback only, not Apps Script deployment, proxying or a working tunnel.",
+    "The result applies to this workstation and network at the recorded time, not the office or every Iranian operator."
+  ]
+}

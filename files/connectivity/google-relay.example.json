@@ -1,0 +1,10 @@
+{
+  "google_host": "216.239.38.120",
+  "sni": ["google.com", "www.google.com"],
+  "socks_port": 12982,
+  "script_keys": [
+    {"id": "REPLACE_WITH_DEPLOYMENT_ID", "account": "personal-primary"}
+  ],
+  "exit_relay_url": "https://exit.example.com/tunnel",
+  "exit_listen_port": 18443
+}

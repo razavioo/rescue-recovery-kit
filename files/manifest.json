@@ -1,0 +1,152 @@
+{
+  "bundle_id": "rescue-public-2026-10-27",
+  "created_at": "2026-10-27T09:55:55.887538+00:00",
+  "files": [
+    {
+      "name": "READ-ME-FIRST.txt",
+      "sha256": "fba6041da57b23e4dfd0e5e2adc523fae3ff6d70021bf30632a85ce51d93729e",
+      "size": 319
+    },
+    {
+      "name": "connectivity/aether-profiles.example.json",
+      "sha256": "a5ec4109604c280afccb88bdae455b00e70e36927e1a58fc4d3f2ae8e6be357d",
+      "size": 553
+    },
+    {
+      "name": "connectivity/aether-release.json",
+      "sha256": "8f9cbf2b673a10c9d31f4e8f6333b09012c62e9d3b5a8ed1fc482abed41af1a6",
+      "size": 551
+    },
+    {
+      "name": "connectivity/aether_runner.py",
+      "sha256": "bf3632041740ab31c944a76663cc4a4d856a78fdcbd44b85fdf8849a59bd2c06",
+      "size": 7543
+    },
+    {
+      "name": "connectivity/connectivityctl",
+      "sha256": "ab7ecb153dd8556b3d4c1f3fdf9cb7bc227715b3f99cc73a986daca9ea786868",
+      "size": 3008
+    },
+    {
+      "name": "connectivity/google-relay-release.json",
+      "sha256": "e9a3f2aef1595a0ce63a1780c69aa274e18daaa1decacaaf8b090506db7cb2a4",
+      "size": 1359
+    },
+    {
+      "name": "connectivity/google-relay.example.json",
+      "sha256": "c105c8a863af520af186f70ed4385efa461c9d232ff174d64438381c28e06351",
+      "size": 284
+    },
+    {
+      "name": "connectivity/limited_access_probe.py",
+      "sha256": "5d196e38a01549a91b2a0506ac00091873bb0660ecf871f2e6236c92d6fd4543",
+      "size": 20556
+    },
+    {
+      "name": "connectivity/recovery-sources.example.json",
+      "sha256": "e867b62ad5e68efab96475e811b2c7b03fdf4375c2c21a3b7af1925a73860dd8",
+      "size": 975
+    },
+    {
+      "name": "connectivity/recovery_bundle.py",
+      "sha256": "2e8badb4ca977572438f3e793267a61c44e3ef49c377c6dd06320f27ebcb934e",
+      "size": 21683
+    },
+    {
+      "name": "connectivity/transport_health.py",
+      "sha256": "2d2b24e1b614828963dbe137f824324cc11624dd50b03cecf071cc8827336ef2",
+      "size": 4044
+    },
+    {
+      "name": "docs/LIMITED-ACCESS-RECOVERY-2026-10-27-fa.md",
+      "sha256": "a6d364f69c475487088bbd404d3a6e310f57c862e15393afc72a811b475a502a",
+      "size": 18133
+    },
+    {
+      "name": "docs/SHUTDOWN-CLOUDFLARE-TRANSPORTS-2026-10-27-fa.md",
+      "sha256": "5a3dfa28543f51865de98dc901dfbdf9e28755746f0b5ac46ab3584cc6a70db0",
+      "size": 38630
+    },
+    {
+      "name": "docs/SHUTDOWN-GOOGLE-GITHUB-RESEARCH-2026-10-27-fa.md",
+      "sha256": "9a7022327e88112bc62186053539561e44a61aa7f2093b7edb64b8d3aca4a93d",
+      "size": 32735
+    },
+    {
+      "name": "docs/evidence/google-relay-preparation-2026-10-27.json",
+      "sha256": "8bec678be453e73b7ee69bad6ac47515043f5d99a6b5408196faf597b00f8a03",
+      "size": 1723
+    },
+    {
+      "name": "docs/evidence/google-relay-source-review-2026-10-27.json",
+      "sha256": "6fcc65790e77fe7aee36632e771eaeec30338033647f02c977dabf59fe575c29",
+      "size": 16453
+    },
+    {
+      "name": "docs/evidence/limited-access-local-2026-10-27.json",
+      "sha256": "92d3d794e685d74b0a91d4c79b27fb7ca96c68e76372a5decd134c04f2a8b893",
+      "size": 12182
+    },
+    {
+      "name": "docs/evidence/limited-access-office-2026-10-27.json",
+      "sha256": "551e25a222339164ea50cff2299ff465fd7b5e5d56cdfb13253f40ebe35b2a65",
+      "size": 11562
+    },
+    {
+      "name": "docs/evidence/limited-access-tools-office-2026-10-27.json",
+      "sha256": "83a6f4df6e79bc68abf45f128e774f9909eec893e6c73180577ab0b83d2541ad",
+      "size": 2752
+    },
+    {
+      "name": "docs/evidence/recovery-github-api-2026-10-27.json",
+      "sha256": "6e15affa0a5ab6f169d08deeb8a2135eba1924d9d1cdf4b1fcb83ce4948dbdf4",
+      "size": 2994
+    },
+    {
+      "name": "scripts/build-cloudflare-profile.py",
+      "sha256": "eea41e16522fe6c4eda9d667ec068ba62e93e43c0a1572f2f3f9426ff4ae67d3",
+      "size": 2220
+    },
+    {
+      "name": "scripts/build-limited-access-kit.py",
+      "sha256": "2bf0b68bf9bc2ee43afed5d9299c4d3485bd60242d564ea27496e442fb4024e6",
+      "size": 11240
+    },
+    {
+      "name": "scripts/install-limited-access-tools.sh",
+      "sha256": "6c972fb8774e058cab85c2ea3168e9c75f854e9da55ffcd831fef21183b6537f",
+      "size": 1656
+    },
+    {
+      "name": "scripts/prepare-aether.py",
+      "sha256": "f272c32781a31f3e142c7b11bbf316ae3046718673d5d1b423049cf5bb728e88",
+      "size": 3659
+    },
+    {
+      "name": "scripts/prepare-google-relay.py",
+      "sha256": "0629dc12075be02e578fd3eddb7198da5e88eda8c2398d4583c396731545f1da",
+      "size": 13845
+    },
+    {
+      "name": "scripts/prepare-tor-bridges.py",
+      "sha256": "433b6c09fd0c0aa7cba975241923c42213397e25a18581f32e14f3248bf05fee",
+      "size": 8832
+    },
+    {
+      "name": "scripts/probe-limited-access.py",
+      "sha256": "0b9db3f282772d8fada98723f71675e701d68f0720c23590b45be829d895a22d",
+      "size": 452
+    },
+    {
+      "name": "scripts/rescue-bootstrap.py",
+      "sha256": "f4f8ca02cf68e1551ec978b902b40d878d32a2ba57836c1212f55c1a9ceac629",
+      "size": 2210
+    },
+    {
+      "name": "server-bundle/opt/proxy-resilience/cloudflare_profiles.py",
+      "sha256": "0bd852b0a82487a6e06e5846aabad35d4d8f5f9609f5e8c0112eadfd7362be8a",
+      "size": 7231
+    }
+  ],
+  "schema_version": 1
+}

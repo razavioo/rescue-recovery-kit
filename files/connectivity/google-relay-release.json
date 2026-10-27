@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "project": "GooseRelayVPN",
+  "repository": "Kianmhz/GooseRelayVPN",
+  "commit": "0ed803f635890cbc021f71d7c8746ca1d2f262b1",
+  "commit_date": "2026-05-29T19:16:46Z",
+  "source_url": "https://api.github.com/repos/Kianmhz/GooseRelayVPN/tarball/0ed803f635890cbc021f71d7c8746ca1d2f262b1",
+  "source_sha256": "bfe19da90b9d7810cc9d0e1e8d860ef785b80ef7f89ed940c9b996aef3178aff",
+  "archive_root": "Kianmhz-GooseRelayVPN-0ed803f",
+  "license": "MIT",
+  "license_path": "LICENSE",
+  "license_copyright": "Copyright (c) 2026 Kian Haddad",
+  "reviewed_at": "2026-10-27",
+  "download_hosts": ["api.github.com", "codeload.github.com"],
+  "download_requirement": "The API tarball redirects to codeload.github.com. API-only reachability is insufficient; keep a local verified archive before an outage.",
+  "preparation_only": true,
+  "review_scope": [
+    "Source identity and archive digest; not a full upstream security audit",
+    "internal/config/client.go and internal/config/server.go configuration fields",
+    "apps_script/Code.gs RELAY_URLS and ContentService redirect dependency",
+    "cmd/client/main.go -config option; no binary was executed"
+  ],
+  "required_files": [
+    "LICENSE", "go.mod", "go.sum", "apps_script/Code.gs",
+    "internal/config/client.go", "internal/config/server.go",
+    "cmd/client/main.go", "cmd/server/main.go"
+  ]
+}

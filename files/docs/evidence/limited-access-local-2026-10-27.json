@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "kind": "limited_access_evidence",
+  "started_at": "2026-10-27T08:41:45Z",
+  "route": "direct",
+  "inherited_proxies": false,
+  "family_scope": "endpoint_connection",
+  "timeout_seconds": 8.0,
+  "total_timeout_seconds": 40.0,
+  "max_parallel_checks": 3,
+  "limitations": [
+    "A successful check proves only the named endpoint, response and selected route at this time.",
+    "HTTPS, API, raw-file and DoH access do not establish a proxy, VPN, domain-fronting or tunnel capability.",
+    "DoH success is a checked A answer for example.com, not arbitrary DNS, DNSSEC or DNS-tunnel proof.",
+    "Failed checks may reflect local DNS, IPv6, rate limits or endpoint policy; they do not establish censorship.",
+    "The Iran-facing control is a service comparison; its physical hosting and domestic routing are not verified.",
+    "IPv4/IPv6 selects the connection to the proxy when a proxy is explicit; target-family choice may be remote.",
+    "Results apply to the machine and network that ran the command, not all Iranian operators or the office."
+  ],
+  "checks": [
+    {
+      "name": "google-web",
+      "provider": "google",
+      "capability": "https_web",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.gstatic.com/generate_204",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 204,
+      "bytes_received": 0,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.303
+    },
+    {
+      "name": "google-web",
+      "provider": "google",
+      "capability": "https_web",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.gstatic.com/generate_204",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.027
+    },
+    {
+      "name": "google-api",
+      "provider": "google",
+      "capability": "public_api",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.googleapis.com/discovery/v1/apis",
+      "observed": false,
+      "tls_verified": true,
+      "http_status": 403,
+      "bytes_received": 1596,
+      "reason": "unexpected_http_status",
+      "seconds": 0.413
+    },
+    {
+      "name": "google-api",
+      "provider": "google",
+      "capability": "public_api",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.googleapis.com/discovery/v1/apis",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.023
+    },
+    {
+      "name": "google-doh",
+      "provider": "google",
+      "capability": "dns_over_https",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://dns.google/dns-query",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "timeout",
+      "seconds": 5.015
+    },
+    {
+      "name": "google-doh",
+      "provider": "google",
+      "capability": "dns_over_https",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://dns.google/dns-query",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.028
+    },
+    {
+      "name": "cloudflare-web",
+      "provider": "cloudflare",
+      "capability": "https_web",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.cloudflare.com/cdn-cgi/trace",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 235,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.312
+    },
+    {
+      "name": "cloudflare-web",
+      "provider": "cloudflare",
+      "capability": "https_web",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:45Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.cloudflare.com/cdn-cgi/trace",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.053
+    },
+    {
+      "name": "cloudflare-doh",
+      "provider": "cloudflare",
+      "capability": "dns_over_https",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:46Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://cloudflare-dns.com/dns-query",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "timeout",
+      "seconds": 5.012
+    },
+    {
+      "name": "cloudflare-doh",
+      "provider": "cloudflare",
+      "capability": "dns_over_https",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:46Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://cloudflare-dns.com/dns-query",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.021
+    },
+    {
+      "name": "github-api-root",
+      "provider": "github",
+      "capability": "public_api",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:46Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://api.github.com/",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 2396,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.29
+    },
+    {
+      "name": "github-api-root",
+      "provider": "github",
+      "capability": "public_api",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:46Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://api.github.com/",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "dns_failed",
+      "seconds": 0.137
+    },
+    {
+      "name": "github-api-meta",
+      "provider": "github",
+      "capability": "public_api",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:46Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://api.github.com/meta",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 166474,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.644
+    },
+    {
+      "name": "github-api-meta",
+      "provider": "github",
+      "capability": "public_api",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:47Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://api.github.com/meta",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "dns_failed",
+      "seconds": 2.061
+    },
+    {
+      "name": "github-web",
+      "provider": "github",
+      "capability": "https_web",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:49Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://github.com/robots.txt",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 14540,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.363
+    },
+    {
+      "name": "github-web",
+      "provider": "github",
+      "capability": "https_web",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:49Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://github.com/robots.txt",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "timeout",
+      "seconds": 5.013
+    },
+    {
+      "name": "github-raw",
+      "provider": "github",
+      "capability": "raw_file_download",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:50Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 4664,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.323
+    },
+    {
+      "name": "github-raw",
+      "provider": "github",
+      "capability": "raw_file_download",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:50Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.012
+    },
+    {
+      "name": "general-control",
+      "provider": "control",
+      "capability": "general_https_control",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:50Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://web.mit.edu/robots.txt",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 199,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.484
+    },
+    {
+      "name": "general-control",
+      "provider": "control",
+      "capability": "general_https_control",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:51Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://web.mit.edu/robots.txt",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "connect_failed",
+      "seconds": 0.13
+    },
+    {
+      "name": "iran-facing-control",
+      "provider": "control",
+      "capability": "iran_facing_https_control",
+      "family": "ipv4",
+      "started_at": "2026-10-27T08:41:51Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.aparat.com/robots.txt",
+      "observed": true,
+      "tls_verified": true,
+      "http_status": 200,
+      "bytes_received": 1471,
+      "evidence": {
+        "response_validation": "expected_body"
+      },
+      "reason": "expected_response",
+      "seconds": 0.127
+    },
+    {
+      "name": "iran-facing-control",
+      "provider": "control",
+      "capability": "iran_facing_https_control",
+      "family": "ipv6",
+      "started_at": "2026-10-27T08:41:51Z",
+      "timeout_seconds": 8.0,
+      "endpoint": "https://www.aparat.com/robots.txt",
+      "observed": false,
+      "tls_verified": false,
+      "http_status": null,
+      "bytes_received": 0,
+      "reason": "dns_failed",
+      "seconds": 0.033
+    }
+  ],
+  "capabilities": {
+    "google": {
+      "observed": [
+        "https_web"
+      ],
+      "unconfirmed": [
+        "dns_over_https",
+        "https_web",
+        "public_api"
+      ],
+      "tunnel_validated": false
+    },
+    "cloudflare": {
+      "observed": [
+        "https_web"
+      ],
+      "unconfirmed": [
+        "dns_over_https",
+        "https_web"
+      ],
+      "tunnel_validated": false
+    },
+    "github": {
+      "observed": [
+        "https_web",
+        "public_api",
+        "raw_file_download"
+      ],
+      "unconfirmed": [
+        "https_web",
+        "public_api",
+        "raw_file_download"
+      ],
+      "tunnel_validated": false
+    },
+    "control": {
+      "observed": [
+        "general_https_control",
+        "iran_facing_https_control"
+      ],
+      "unconfirmed": [
+        "general_https_control",
+        "iran_facing_https_control"
+      ],
+      "tunnel_validated": false
+    }
+  },
+  "finished_at": "2026-10-27T08:41:54Z",
+  "seconds": 9.172
+}

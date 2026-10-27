@@ -1,0 +1,4 @@
+This kit contains public tools and preparation templates, not a working subscription.
+Verify manifest.json against the SHA-256 you retained independently.
+No received file should be run before reviewing it. No tunnel has been qualified by downloading this kit.
+Begin with docs/LIMITED-ACCESS-RECOVERY-2026-10-27-fa.md.

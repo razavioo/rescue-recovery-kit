@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-27",
+  "scope": "Local source verification and preparation only",
+  "source": {
+    "project": "GooseRelayVPN",
+    "repository": "Kianmhz/GooseRelayVPN",
+    "commit": "0ed803f635890cbc021f71d7c8746ca1d2f262b1",
+    "archive_sha256": "bfe19da90b9d7810cc9d0e1e8d860ef785b80ef7f89ed940c9b996aef3178aff",
+    "files_verified": 72,
+    "license": "MIT"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/prepare-google-relay.py --download",
+      "result": "passed",
+      "network_dependency": "api.github.com redirects to codeload.github.com"
+    },
+    {
+      "command": "python3 scripts/prepare-google-relay.py --archive offline-toolkit/google-relay/0ed803f635890cbc021f71d7c8746ca1d2f262b1/source.tar.gz",
+      "result": "passed",
+      "network_dependency": "none"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_google_relay_prep.py -v",
+      "result": "passed",
+      "tests": 7,
+      "network_dependency": "none"
+    }
+  ],
+  "upstream_code_executed": false,
+  "binary_built": false,
+  "google_account_used": false,
+  "google_deployment_created": false,
+  "service_enabled": false,
+  "certificate_authority_installed": false,
+  "live_tunnel_verified": false,
+  "private_production_key_generated": false,
+  "old_parspack_modified": false,
+  "limitations": [
+    "Archive identity and preparation tests are not a complete upstream security audit.",
+    "The archive contains source, not a guaranteed offline Go build environment.",
+    "Current Google fronting, Apps Script redirect and owned HTTPS exit must be tested as one complete data path.",
+    "No Iran operator-specific availability or throughput conclusion follows from these local checks."
+  ]
+}

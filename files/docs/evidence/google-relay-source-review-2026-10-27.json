@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-27",
+  "upstream": "https://github.com/Kianmhz/GooseRelayVPN",
+  "commit": "0ed803f635890cbc021f71d7c8746ca1d2f262b1",
+  "archive_sha256": "bfe19da90b9d7810cc9d0e1e8d860ef785b80ef7f89ed940c9b996aef3178aff",
+  "source_path": "offline-toolkit/google-relay/0ed803f635890cbc021f71d7c8746ca1d2f262b1/source",
+  "scope": "Task-directed exact-source review of TLS, AES-GCM/batch framing, client/server configuration and entry points, exit target routing/resource limits, session duplicate handling, Apps Script forwarder, installer/build hooks and inspected pure frame tests. This is not an exhaustive formal security audit or a penetration test.",
+  "graph_evidence": {
+    "tier": "Verify, inherited parent evidence",
+    "project": "redacted-project",
+    "generation": "2026-10-27T08:29:04Z",
+    "coverage": "offline-toolkit reported not_indexed_dir by design; this review used exact file reads and targeted source searches, without claiming graph coverage"
+  },
+  "source_lock_sha256": {
+    "go.mod": "a1eab0373c5840050a026c06a475018452a7a8d382f159b272eead9c3fc7c61b",
+    "go.sum": "7646e344af531195dafe34993d710ec8b203ed4f8a2365e09dc7b9d2cf9472ba"
+  },
+  "decision": {
+    "local_build": "Appropriate to compile as a research candidate using an inspected local compiler, locked dependencies, CGO_ENABLED=0 and -mod=readonly, without executing the resulting tunnel programs or privileged upstream installer.",
+    "autostart_or_production": "Not qualified by this review. Requires owned exit and Google deployment, network measurements, bounded resource controls and accepted protocol limitations.",
+    "build_evidence": "offline-toolkit/google-relay/0ed803f635890cbc021f71d7c8746ca1d2f262b1/candidate-bin/build-evidence.json"
+  },
+  "findings": [
+    {
+      "id": "tls-normal-verification",
+      "classification": "verified protection",
+      "source": ["internal/carrier/fronting.go:349", "internal/carrier/fronting.go:359"],
+      "finding": "Fronted transports use Go's normal certificate chain and configured SNI hostname verification, a TLS 1.3 minimum, ALPN h2/http1.1 and default roots. No InsecureSkipVerify, VerifyPeerCertificate or VerifyConnection bypass was found in the pinned project source. Configured GoogleIP overrides the network destination while HTTP authority remains the request URL.",
+      "limit": "This authenticates the Google front matching SNI; it does not independently authenticate Apps Script or the exit. The shared AES key authenticates tunnel envelopes. Connectivity of Google search alone does not prove fronted Apps Script routing works."
+    },
+    {
+      "id": "direct-relay-sni-bug",
+      "classification": "functional blocker",
+      "source": ["internal/config/client.go:344", "internal/carrier/client.go:283", "internal/carrier/fronting.go:56", "internal/carrier/fronting.go:359"],
+      "finding": "relay_urls direct mode leaves GoogleIP and SNIHosts empty. NewFrontedClients still replaces an empty SNI list with www.google.com, and newFrontedClient unconditionally sets TLS ServerName to that value. An owned direct HTTPS relay with its ordinary hostname certificate is therefore verified as www.google.com and fails.",
+      "preparation": "Use this pin only as an unqualified fronted Apps Script candidate. A separately reviewed transport fix is required before advertising generic direct HTTPS relay_urls support. Do not disable certificate verification to work around it."
+    },
+    {
+      "id": "aead-nonces-and-scope",
+      "classification": "verified protection with limitations",
+      "source": ["internal/frame/crypto.go:35", "internal/frame/crypto.go:55", "internal/frame/crypto.go:69", "internal/frame/crypto.go:247"],
+      "finding": "AES-256-GCM is constructed from exactly 32 key bytes. Each batch obtains a fresh 12-byte nonce from crypto/rand. GCM supplies a 16-byte authentication tag; authentication occurs before frame parsing and decompression. Tampering with the nonce/ciphertext/tag or using a different key fails authentication.",
+      "limitations": [
+        "The same pre-shared key is used by both directions and every client on that exit; there is no per-client cryptographic credential, direction-separated key or AAD binding.",
+        "There is no key exchange, forward secrecy, automatic rotation, per-key message budget or nonce uniqueness registry.",
+        "Every holder of the shared key can construct envelopes with any ClientID and SessionID. Server owner maps provide routing separation among honest peers, not protection against another shared-key holder."
+      ]
+    },
+    {
+      "id": "replay-and-reflection",
+      "classification": "protocol limitation",
+      "source": ["internal/frame/crypto.go:69", "internal/session/session.go:495", "internal/exit/exit.go:460", "internal/carrier/client.go:666"],
+      "finding": "GCM Open has no replay cache, timestamp, epoch or monotonic batch counter. Session.deliverRx discards sequence numbers below the current receive sequence while an existing session lives; it also queues future sequence numbers. A valid recorded SYN can be accepted again after the corresponding exit session is removed or the server restarts. The client discards the decoded response ClientID instead of checking it against its own, and direction keys/formats are identical.",
+      "limit": "No replay/reflection exploit was executed. Sequence deduplication is not a durable envelope anti-replay guarantee; a deployment must not claim one."
+    },
+    {
+      "id": "unauthenticated-input",
+      "classification": "resource exposure",
+      "source": ["internal/frame/crypto.go:228", "internal/exit/exit.go:295", "internal/exit/exit.go:364", "internal/exit/exit.go:895"],
+      "finding": "DecodeBatch accepts an exactly empty HTTP body as a zero-ClientID, zero-frame batch without GCM authentication. handleTunnel then allocates/uses that client's wake channel, waits for its 8-second long-poll and constructs an encrypted empty response. Invalid nonempty ciphertext is rejected before target dialing, but each request can consume body allocation/base64/GCM work and produce a log entry.",
+      "limit": "No authentication-free arbitrary target dialing was found. The empty-body issue concerns unauthenticated resource consumption and a response oracle, not disclosure of the AES key."
+    },
+    {
+      "id": "exit-ssrf-and-privilege",
+      "classification": "deployment blocker unless constrained",
+      "source": ["internal/exit/exit.go:460", "internal/exit/exit.go:548", "internal/exit/dnscache.go:83", "internal/config/server.go:80"],
+      "finding": "An authenticated SYN target is passed to a TCP dialer or configured SOCKS5 proxy without a destination allowlist or denylist. Literal IPs, localhost, private ranges and other reachable host:port values are not excluded. Default server bind is 0.0.0.0:8443 and the exit itself serves ordinary HTTP, requiring a separately configured authenticated/HTTPS-facing deployment boundary.",
+      "preparation": "Use an owned isolated exit with a dedicated unprivileged account, loopback-only listener behind HTTPS, egress restrictions covering loopback/private/link-local/metadata destinations and resolved addresses, resource quotas and a small trusted cohort with a unique PSK. A public research exit must not be colocated with sensitive office services by default."
+    },
+    {
+      "id": "bounded-and-unbounded-resources",
+      "classification": "partial hardening already present",
+      "source": ["internal/exit/exit.go:104", "internal/exit/exit.go:280", "internal/exit/exit.go:337", "internal/session/session.go:21", "internal/session/session.go:83", "internal/session/session.go:507", "internal/carrier/client.go:43"],
+      "existing_limits": [
+        "Exit HTTP request body: 64 MiB; client relay response body: 32 MiB.",
+        "Exit HTTP read timeout: 30 seconds; write timeout: 18 seconds; active response drain: 350 ms; idle long-poll: 8 seconds.",
+        "Exit idle-session GC: 10 minutes, scanned every 60 seconds; local completed-session final timeout: 30 seconds.",
+        "Per-session TX soft high-water: 8 MiB; rxInbox and RxChan each have 1024 slots; saturated inbox is stopped after a 5-second wait.",
+        "Normal frames emitted by this client use at most 256 KiB payloads; frame parser permits up to 10 MiB; exit response payload budget is 22 MiB."
+      ],
+      "remaining_limits": [
+        "No per-IP/client/global request-rate, concurrent-request, total session, SYN goroutine or total memory cap was found in the reviewed exit handler.",
+        "SYNs in one authenticated batch spawn a goroutine each; batch count can reach 65535.",
+        "The out-of-order rxQueue map has no explicit sequence gap or entry/byte cap, despite bounded inbox channels.",
+        "DNS and recent dial-failure maps expire on access rather than enforcing a global capacity."
+      ]
+    },
+    {
+      "id": "decompression-budget",
+      "classification": "authenticated resource exhaustion risk",
+      "source": ["internal/frame/crypto.go:105", "internal/frame/crypto.go:262", "internal/frame/crypto.go:271", "github.com/klauspost/compress@v1.17.11/zstd/decoder_options.go:40"],
+      "finding": "Legacy FLATE decoding copies into an unbounded bytes.Buffer. Zstd DecodeAll uses the dependency's default decoder options, whose maximum decoded size is 64 GiB, rather than a tunnel-sized application budget. Authentication precedes decompression, so an attacker needs the PSK or replay of a previously valid malicious envelope.",
+      "preparation": "A production fork needs explicit decompressed-byte/frame/queue budgets and concurrency limits; the 64 MiB encrypted request limit alone does not impose a safe decompressed memory ceiling."
+    },
+    {
+      "id": "apps-script-abuse-and-transport",
+      "classification": "operational limitation",
+      "source": ["apps_script/Code.gs:12", "apps_script/Code.gs:21", "apps_script/Code.gs:33", "apps_script/Code.gs:37", "apps_script/Code.gs:47"],
+      "finding": "The Apps Script forwarder holds no tunnel key and forwards arbitrary caller-supplied POST contents to its static configured exit list. It cannot authenticate or rate-limit callers before spending Apps Script/URLFetch quotas. The upstream sample uses plain HTTP to the exit; the repository's preparation wrapper replaces this with owned HTTPS /tunnel. followRedirects:false is present on the Apps-Script-to-exit fetch.",
+      "preparation": "A live deployment requires an operator-owned Google account and Web App, a publicly reachable owned HTTPS exit, its actual Deployment ID, quota budgeting, and ISP-level measurements of both script.google.com and the Google ContentService redirect path. Do not publish the Deployment ID/PSK in a public kit."
+    },
+    {
+      "id": "client-redirects-and-startup",
+      "classification": "execution boundary",
+      "source": ["internal/carrier/fronting.go:128", "internal/carrier/fronting.go:406", "cmd/client/main.go:173", "cmd/client/main.go:196"],
+      "finding": "The HTTP client uses Go's default redirect policy rather than an explicit host/scheme allowlist. Fronted mode fixes the dial destination and configured SNI for HTTPS requests; upstream startup SNI probing reads response bodies without the normal 32 MiB poll-response cap. Constructing the carrier can probe and prewarm network connections, and normal client startup runs an end-to-end diagnostic, then opens SOCKS even when that diagnostic fails.",
+      "preparation": "No config-validation-only CLI exists at this pin. Do not launch a candidate to merely validate JSON. Keep test execution restricted to inspected pure packages until live network operation is explicitly intended."
+    },
+    {
+      "id": "socks-and-privacy",
+      "classification": "verified behavior",
+      "source": ["internal/socks/server.go:35", "internal/socks/server.go:48", "internal/config/client.go:393", "internal/exit/exit.go:610"],
+      "finding": "SOCKS is TCP only; UDP ASSOCIATE is explicitly rejected. Optional RFC1929 username/password authentication is enabled only when both config values are set; otherwise it is unauthenticated. Default client listen is 127.0.0.1:1080. socks5h clients can carry the hostname to the exit, while an application that resolves names itself can still leak local DNS. Exit logs include destination host:port and partial session/client IDs even without debug timing.",
+      "limit": "This is not a full-device or UDP VPN and does not automatically route every application or DNS request."
+    },
+    {
+      "id": "upstream-proxy-auth",
+      "classification": "configuration limitation",
+      "source": ["internal/config/server.go:101", "internal/exit/exit.go:234"],
+      "finding": "upstream_proxy accepts only socks5:// URLs and retains u.Host. URL userinfo is not passed to the SOCKS5 dialer, which is constructed with nil authentication. A socks5://user:pass@host:port string therefore does not configure authenticated upstream SOCKS. The constructor includes a fallback-to-direct path if dialer construction fails.",
+      "preparation": "Use a deliberately unauthenticated, loopback-only upstream proxy or separately review support for authentication and strict failure behavior. Do not promise credentialed SOCKS upstream or a fail-closed policy from this pin."
+    },
+    {
+      "id": "build-and-installer-hooks",
+      "classification": "local compilation boundary reviewed",
+      "source": ["Makefile", ".github/workflows/release.yml", "scripts/goose-server.sh", "cmd/client/color_windows.go", "bench/harness/main.go"],
+      "finding": "No init functions, go:generate directives, cgo imports or TLS-verification bypass hooks were found in the pinned project's Go source. The Windows-only unsafe usage manipulates console color. os/exec occurs in the benchmark harness, which is outside candidate entry points and was not executed. Direct go build does not run Makefile, release workflows, benchmark scripts or the installer.",
+      "installer_excluded": "The upstream root installer installs apt dependencies, resolves mutable latest releases/main config, stops/kills matching processes, prints generated PSKs, extracts into /root/goose, creates/enables/restarts systemd services and opens a firewall port. None of it was run.",
+      "test_dependency_initialization": "The inspected Zstd package init builds a bitmask table; its amd64 CPU helper init reads CPU extension flags. No network or subprocess initialization was found in the inspected pure-test dependency paths. This is not a full dependency supply-chain audit."
+    }
+  ],
+  "cli_from_source": {
+    "client": [
+      "-config PATH (default client_config.json)",
+      "-version (print version and exit)",
+      "-dump-diag (write redacted diagnostics zip and exit)",
+      "-diag-output PATH (optional diagnostics output path)"
+    ],
+    "server": ["-config PATH (default server_config.json)", "-version (print version and exit)"],
+    "server_config": ["server_host", "server_port", "tunnel_key", "debug_timing", "upstream_proxy", "initial_response_bytes_pre_encode", "listen_addr (legacy)", "aes_key_hex (legacy)"],
+    "client_config": ["socks_host", "socks_port", "google_host", "sni (string or array)", "script_keys (strings or id/account objects)", "relay_urls (direct mode with noted SNI bug)", "tunnel_key", "debug_timing", "socks_user", "socks_pass", "coalesce_step_ms", "idle_slots_per_bucket"],
+    "parser_note": "Unknown JSON fields are silently ignored by json.Unmarshal. Keys must be exactly 64 hex characters/32 bytes. Explicit loopback listener and private file modes must be enforced by the preparation/deployment wrapper."
+  },
+  "preparation_boundaries": [
+    "No SSH to office, legacy ParsPack or any external exit was performed for this subtask.",
+    "No Google account or Apps Script was created or deployed; no tunnel binaries or network integration tests were executed.",
+    "The upstream source, go.mod and go.sum were left unchanged; candidate/cache/toolchain files are separate offline artifacts.",
+    "Compiler/module checksum verification proves artifact integrity relative to its sources, not absence of vulnerabilities or successful censorship circumvention.",
+    "Published dependency vulnerability advisories were not comprehensively reviewed; dependency versions remain pinned upstream rather than silently upgraded."
+  ]
+}

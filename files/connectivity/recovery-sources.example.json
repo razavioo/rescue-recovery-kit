@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "offline-copy",
+      "enabled": false,
+      "type": "directory",
+      "directory": "/media/rescue/kit/files"
+    },
+    {
+      "id": "github-api",
+      "enabled": false,
+      "type": "github-contents",
+      "repository": "YOUR-OWNER/YOUR-RECOVERY-REPOSITORY",
+      "ref": "REPLACE_WITH_REVIEWED_40_CHARACTER_COMMIT",
+      "prefix": "files"
+    },
+    {
+      "id": "cloudflare-mirror",
+      "enabled": false,
+      "type": "https",
+      "base_url": "https://recovery.example.com/"
+    },
+    {
+      "id": "google-static-mirror",
+      "enabled": false,
+      "type": "apps-script",
+      "deployment_url": "https://script.google.com/macros/s/YOUR-DEPLOYMENT/exec"
+    },
+    {
+      "id": "google-fixed-edge-candidate",
+      "enabled": false,
+      "type": "apps-script",
+      "deployment_url": "https://script.google.com/macros/s/YOUR-DEPLOYMENT/exec",
+      "connect_ip": "216.239.38.120"
+    }
+  ]
+}

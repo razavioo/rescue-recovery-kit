@@ -1,0 +1,10 @@
+{
+  "repository": "CluvexStudio/Aether",
+  "version": "v2.4.0",
+  "commit": "d58f9d568083129ce2c767c85054021eb3ee6a38",
+  "assets": {
+    "x86_64": {"name": "aether-linux-x86_64-musl.tar.gz", "sha256": "44763e765050806b91d10ee2e1a662eac61fd8251f133c3ac241ca3bd80fac4d"},
+    "aarch64": {"name": "aether-linux-aarch64-musl.tar.gz", "sha256": "728d1433f08fb3155ebc042299a17fc0ee1afb8ec59f87616991da0f5a24afac"},
+    "armv7l": {"name": "aether-linux-armv7-musl.tar.gz", "sha256": "a89bfaf5a25b6705243460c0b491ecdf216bf6f024a2ec39f9189cd4ee5eaf5b"}
+  }
+}

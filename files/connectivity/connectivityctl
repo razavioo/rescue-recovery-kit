@@ -1,0 +1,64 @@
+#!/usr/bin/python3
+"""Operate legacy and Cloudflare rescue transports; measure actual HTTPS."""
+import argparse
+from concurrent.futures import ThreadPoolExecutor
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+if not (Path(__file__).resolve().parent / 'transport_health.py').exists():
+    sys.path.insert(0, '/opt/connectivity-tools/rescue')
+from transport_health import TARGETS, probe
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action', choices=('status', 'test', 'diagnose', 'start', 'stop', 'restart'))
+    parser.add_argument('channels', nargs='*', choices=tuple(TARGETS))
+    parser.add_argument('--json', action='store_true')
+    parser.add_argument('--workload', action='store_true', help='also transfer 64 KiB in each direction')
+    parser.add_argument('--timeout', type=int, default=15)
+    args = parser.parse_args()
+    if not 1 <= args.timeout <= 55:
+        parser.error('timeout must be between 1 and 55 seconds per request')
+    if args.action == 'diagnose':
+        if args.channels or args.workload:
+            parser.error('diagnose checks endpoint access; use test for a channel workload')
+        from limited_access_probe import probe as access_probe
+        print(json.dumps(access_probe(timeout=args.timeout), indent=2))
+        return 0
+    names = args.channels or list(TARGETS)
+    if args.action in ('start', 'stop', 'restart'):
+        if len(args.channels) != 1 or not TARGETS[names[0]][2]:
+            parser.error('select exactly one channel with a managed systemd service')
+        return subprocess.call(['systemctl', args.action, TARGETS[names[0]][2]])
+    if args.action == 'status':
+        results = []
+        for name in names:
+            unit = TARGETS[name][2]
+            try:
+                status = subprocess.run(['systemctl', 'is-active', unit], capture_output=True,
+                                        text=True, timeout=5) if unit else None
+                state = status.stdout.strip() if status else 'unmanaged'
+            except (OSError, subprocess.TimeoutExpired):
+                state = 'unavailable'
+            results.append({'channel': name, 'service': state})
+        good = True
+    else:
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            results = list(pool.map(lambda name: probe(name, args.timeout, args.workload), names))
+        # An explicitly requested set must all pass; a general survey needs one
+        # fully healthy path. A listener or arbitrary HTTP 200 is insufficient.
+        good = all(r['healthy'] for r in results) if args.channels else any(r['healthy'] for r in results)
+    if args.json:
+        print(json.dumps({'observed_at': time.time(), 'channels': results}, indent=2))
+    else:
+        for result in results:
+            print(result['channel'] + ': ' + json.dumps({k: v for k, v in result.items() if k != 'channel'}))
+    return 0 if good else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

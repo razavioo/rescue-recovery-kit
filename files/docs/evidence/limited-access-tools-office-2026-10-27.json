@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "observed_at_utc": "2026-10-27T09:06:10Z",
+  "host": "office-host",
+  "scope": "Install bounded diagnostic and pinned recovery helpers only",
+  "hostname_verified_before_install": true,
+  "existing_cli_baseline_matched_repository_head": true,
+  "installer": "scripts/install-limited-access-tools.sh",
+  "staging_and_previous_helper_backup": "/PRIVATE/TEMPORARY/HELPER-BACKUP",
+  "previous_connectivityctl_sha256": "8429ce288334ff01aa34c73f2a69110e78752c55388e864398408c6a278505cf",
+  "deployed_sha256": {
+    "/usr/local/sbin/connectivityctl": "ab7ecb153dd8556b3d4c1f3fdf9cb7bc227715b3f99cc73a986daca9ea786868",
+    "/usr/local/sbin/rescue-access-probe": "0b9db3f282772d8fada98723f71675e701d68f0720c23590b45be829d895a22d",
+    "/usr/local/sbin/rescue-bootstrap": "f4f8ca02cf68e1551ec978b902b40d878d32a2ba57836c1212f55c1a9ceac629",
+    "/opt/connectivity-tools/rescue/aether_runner.py": "bf3632041740ab31c944a76663cc4a4d856a78fdcbd44b85fdf8849a59bd2c06",
+    "/opt/connectivity-tools/rescue/transport_health.py": "2d2b24e1b614828963dbe137f824324cc11624dd50b03cecf071cc8827336ef2",
+    "/opt/connectivity-tools/rescue/limited_access_probe.py": "5d196e38a01549a91b2a0506ac00091873bb0660ecf871f2e6236c92d6fd4543",
+    "/opt/connectivity-tools/rescue/recovery_bundle.py": "2e8badb4ca977572438f3e793267a61c44e3ef49c377c6dd06320f27ebcb934e"
+  },
+  "deployed_hashes_match_local_sources": true,
+  "checks": [
+    {"command": "rescue-access-probe --help", "exit_code": 0},
+    {"command": "rescue-bootstrap --help", "exit_code": 0},
+    {"command": "connectivityctl status masterdns --json", "exit_code": 0, "observed_service_state": "inactive"},
+    {
+      "command": "connectivityctl diagnose --json --timeout 1",
+      "exit_code": 0,
+      "seconds": 4.011,
+      "report_schema_version": 1,
+      "checks": 11,
+      "observed_checks": 0,
+      "purpose": "Installed import chain and bounded JSON-report smoke test; one-second endpoint budget is not an availability measurement"
+    }
+  ],
+  "services_started_stopped_or_restarted": false,
+  "network_or_firewall_changes": false,
+  "accounts_or_credentials_changed": false,
+  "google_or_cloudflare_resource_published": false,
+  "old_parspack_accessed_or_modified": false,
+  "limitations": [
+    "Helper installation does not establish any new tunnel or change current channel selection.",
+    "status reports a service state and exits successfully even if that service is inactive; it is not an end-to-end transport test.",
+    "Use limited-access-office-2026-10-27.json for the separate five-second IPv4/IPv6 endpoint evidence.",
+    "The temporary helper backup is not a durable backup and can be removed by normal system temporary-file cleanup."
+  ]
+}

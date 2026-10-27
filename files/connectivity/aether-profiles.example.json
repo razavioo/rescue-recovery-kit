@@ -1,0 +1,10 @@
+{
+  "warp-ipv6": {"enabled": false, "recover": false},
+  "warp-ipv4": {"enabled": false, "recover": false},
+  "warp-dual": {"enabled": false, "recover": false},
+  "masque-h2-ipv4": {"enabled": false, "recover": false, "fragment": false, "masque_sni": "www.cloudflare.com"},
+  "masque-h2-ipv6": {"enabled": false, "recover": false, "fragment": false, "masque_sni": "www.cloudflare.com"},
+  "masque-h3-ipv4": {"enabled": false, "recover": false},
+  "masque-h3-ipv6": {"enabled": false, "recover": false},
+  "wggre": {"enabled": false, "recover": false}
+}
