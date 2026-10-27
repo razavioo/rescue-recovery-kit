@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "google-static",
+      "enabled": true,
+      "type": "apps-script",
+      "deployment_url": "https://script.google.com/macros/s/AKfycbyuYdoAydxraxEEajOrknwOpgQTPncFpFaVuyug2iVYU5NELpiuaQEy1a-HC7VN_uQ/exec"
+    },
+    {
+      "id": "github-primary",
+      "enabled": true,
+      "type": "github-contents",
+      "repository": "razavioo/rescue-recovery-kit",
+      "ref": "60795a1526d8e2f94a41c8722f7435d05573b057",
+      "prefix": "files"
+    },
+    {
+      "id": "github-second-attempt",
+      "enabled": true,
+      "type": "github-contents",
+      "repository": "razavioo/rescue-recovery-kit",
+      "ref": "60795a1526d8e2f94a41c8722f7435d05573b057",
+      "prefix": "files"
+    },
+    {
+      "id": "cloudflare-custom-candidate",
+      "enabled": true,
+      "type": "https",
+      "base_url": "https://recovery.salamnext.ir/"
+    },
+    {
+      "id": "cloudflare-workers-candidate",
+      "enabled": true,
+      "type": "https",
+      "base_url": "https://rescue-recovery-static.razavioo.workers.dev/"
+    },
+    {
+      "id": "google-fixed-edge-candidate",
+      "enabled": false,
+      "type": "apps-script",
+      "deployment_url": "https://script.google.com/macros/s/AKfycbyuYdoAydxraxEEajOrknwOpgQTPncFpFaVuyug2iVYU5NELpiuaQEy1a-HC7VN_uQ/exec",
+      "connect_ip": "216.239.38.120"
+    }
+  ]
+}
